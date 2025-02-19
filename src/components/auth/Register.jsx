@@ -1,14 +1,28 @@
 import React, { useState } from "react";
 import Input from "../../ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { userRegisterStart } from "../../slice/auth";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    dispatch(userRegisterStart());
+  };
   return (
-    <main class="form-signin w-100  h-100">
-      <form className="w-25 m-auto">
-        <h1 class="h3 mb-3 fw-normal">Please register</h1>
+    <main className="form-signin w-100  d-flex" style={{ minHeight: "80dvh" }}>
+      <form
+        className="w-25 m-auto"
+        onSubmit={(e) => {
+          handleRegister(e);
+        }}
+      >
+        <h1 className="h3 mb-3 fw-normal">Please register</h1>
 
         <Input
           id={"username"}
@@ -31,8 +45,12 @@ function Register() {
           setState={setPassword}
         />
 
-        <button class="btn btn-primary w-100 py-2 mt-4" type="submit">
-          Register
+        <button
+          className="btn btn-primary w-100 py-2 mt-4"
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? "loader..." : "Register"}
         </button>
       </form>
     </main>
