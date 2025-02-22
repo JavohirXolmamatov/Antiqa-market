@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import Input from "../../ui/input";
 import { useDispatch, useSelector } from "react-redux";
-import { userRegisterStart } from "../../slice/auth";
+import {
+  userSignFailure,
+  userSignStart,
+  userSignSuccess,
+} from "../../slice/auth";
+import AuthService from "../../service/supabase.auth";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -10,10 +15,22 @@ function Register() {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth);
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    dispatch(userRegisterStart());
+    const user = { email, password, username };
+    dispatch(userSignStart());
+    try {
+      const { data, error } = await AuthService.registerUser(user);
+      if (error) {
+        throw new Error(error.message || "Something went wrong");
+      }
+      dispatch(userSignSuccess(data));
+    } catch (error) {
+      console.log(error);
+      dispatch(userSignFailure(error.message));
+    }
   };
+
   return (
     <main className="form-signin w-100  d-flex" style={{ minHeight: "80dvh" }}>
       <form

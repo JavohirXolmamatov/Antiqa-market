@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Input from "../../ui/input";
 import { useDispatch, useSelector } from "react-redux";
-import { userLoginStart } from "../../slice/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
