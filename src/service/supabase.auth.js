@@ -9,12 +9,12 @@ const AuthService = {
     const request = await supabase.auth.signInWithPassword(user);
     return request;
   },
-  async getUser() {
-    const request = await supabase.auth.getUser();
+  async getUser(token) {
+    const request = await supabase.auth.getUser(token);
     return request;
   },
-  async logOutUser() {
-    const request = await supabase.auth.signOut();
+  async logOutUser(token) {
+    const request = await supabase.auth.signOut(token);
     return request;
   },
 };

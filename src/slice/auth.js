@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+// import AuthLocalStorage from "../helpers/localstorage";
 
 const initialState = {
   isLoading: false,
@@ -21,6 +22,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.loggedIn = true;
       state.user = actions.payload;
+      // AuthLocalStorage.setItem("token", actions.payload.user.id);
     },
     userSignFailure: (state, actions) => {
       state.isLoading = false;
@@ -29,7 +31,6 @@ export const authSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { userSignStart, userSignSuccess, userSignFailure } =
   authSlice.actions;
 

@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import Input from "../../ui/input";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  userSignFailure,
+  userSignStart,
+  userSignSuccess,
+} from "../../slice/auth";
+import AuthService from "../../service/supabase.auth";
+import ValidationError from "./ValidationError";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -8,9 +15,19 @@ function Login() {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(userLoginStart());
+    const user = { email, password };
+    dispatch(userSignStart());
+    try {
+      const { data, error } = await AuthService.loginUser(user);
+      if (error) {
+        throw new Error(error.message);
+      }
+      dispatch(userSignSuccess(data));
+    } catch (error) {
+      dispatch(userSignFailure(error.message));
+    }
   };
 
   return (
@@ -22,6 +39,7 @@ function Login() {
         }}
       >
         <h1 className="h3 mb-3 fw-normal">Please Login</h1>
+        <ValidationError />
 
         <Input
           type={"email"}

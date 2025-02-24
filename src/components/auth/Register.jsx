@@ -7,6 +7,7 @@ import {
   userSignSuccess,
 } from "../../slice/auth";
 import AuthService from "../../service/supabase.auth";
+import ValidationError from "./ValidationError";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -26,7 +27,7 @@ function Register() {
       }
       dispatch(userSignSuccess(data));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       dispatch(userSignFailure(error.message));
     }
   };
@@ -40,6 +41,7 @@ function Register() {
         }}
       >
         <h1 className="h3 mb-3 fw-normal">Please register</h1>
+        <ValidationError />
 
         <Input
           id={"username"}
